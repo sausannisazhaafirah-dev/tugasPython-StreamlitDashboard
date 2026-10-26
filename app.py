@@ -3,32 +3,28 @@ import plotly.express as px
 import plotly.io as pio
 import streamlit as st
 
-# =========================================================
 # KONFIGURASI HALAMAN
-# =========================================================
 st.set_page_config(
     page_title="Dashboard Penjualan Superstore",
     layout="wide",
 )
 
-# =========================================================
+
 # PALET WARNA (pink pastel)
-# =========================================================
-PINK = "#E75480"        # pink utama
-PINK_MUDA = "#F7A1C4"   # pink muda
-LAVENDER = "#B79CD9"    # lavender
-MAUVE = "#9C6B98"       # ungu keabuan (dipakai untuk nilai rugi)
-PEACH = "#F6C1B0"       # peach
-TEKS = "#5A3A4A"        # warna teks (coklat-plum lembut)
-LATAR = "#FFF7FA"       # latar halaman
+PINK = "#E75480"        
+PINK_MUDA = "#F7A1C4"   
+LAVENDER = "#B79CD9"    
+MAUVE = "#9C6B98"       
+PEACH = "#F6C1B0"       
+TEKS = "#5A3A4A"        
+LATAR = "#FFF7FA"       
 LATAR_KARTU = "#FFFFFF"
 GARIS = "#F6D5E2"
 
 PALET_CHART = [PINK, LAVENDER, PINK_MUDA, PEACH, MAUVE]
 
-# =========================================================
+
 # CSS CUSTOM
-# =========================================================
 st.markdown(
     f"""
 <style>
@@ -111,7 +107,7 @@ details {{
     unsafe_allow_html=True,
 )
 
-# Template plotly bertema pink untuk semua chart
+# Template plotly untuk semua chart
 pio.templates["girlie"] = pio.templates["plotly_white"]
 pio.templates["girlie"].layout.update(
     font=dict(family="Quicksand, sans-serif", color=TEKS),
@@ -134,9 +130,8 @@ pio.templates["girlie"].layout.update(
 pio.templates.default = "girlie"
 
 
-# =========================================================
+
 # LOAD & PERSIAPAN DATA
-# =========================================================
 @st.cache_data
 def load_data():
     df = pd.read_csv("SuperStore_Cleaned.csv")
@@ -157,9 +152,8 @@ def load_data():
 df = load_data()
 
 
-# =========================================================
+
 # JUDUL & DESKRIPSI
-# =========================================================
 st.title("Dashboard Penjualan Superstore 2019–2020")
 st.markdown(
     """
@@ -172,9 +166,8 @@ dan retur berdasarkan periode, wilayah, kategori produk, dan segmen pelanggan.
 )
 
 
-# =========================================================
+
 # FILTER INTERAKTIF (SIDEBAR)
-# =========================================================
 st.sidebar.header("Filter Data")
 
 tgl_min = df["Order Date"].min().date()
@@ -218,9 +211,8 @@ if dff.empty:
     st.stop()
 
 
-# =========================================================
+
 # KPI
-# =========================================================
 total_sales = dff["Sales"].sum()
 total_profit = dff["Profit"].sum()
 profit_margin = total_profit / total_sales * 100 if total_sales else 0
@@ -250,9 +242,8 @@ kartu_kpi(k5, "Return Rate", f"{return_rate:.1f}%")
 st.markdown("---")
 
 
-# =========================================================
+
 # VISUALISASI
-# =========================================================
 
 # 1. LINE CHART – Tren Sales & Profit per Bulan
 st.subheader("Tren Sales & Profit per Bulan")
@@ -343,9 +334,8 @@ with col4:
     st.plotly_chart(fig_heat, width="stretch")
 
 
-# =========================================================
+
 # TABEL DATA
-# =========================================================
 with st.expander("Lihat data hasil filter"):
     st.dataframe(dff.drop(columns=["Bulan", "Diretur"]), width="stretch")
 
